@@ -7,7 +7,6 @@ from PySide6.QtGui import QColor, QPainter, QTextFormat, QKeyEvent, QWheelEvent,
 
 import sys
 
-
 class QTextEditWithLineNum(QTextEdit):
 
     def __init__(self, parent=None):
@@ -103,12 +102,3 @@ class LineNumPaint(QWidget):
 
     def paintEvent(self, event):
         self.q_edit_line_num.lineNumberAreaPaintEvent(event)
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    codeEditor = QTextEditWithLineNum()
-    codeEditor.setWindowTitle("带行号的编辑器")
-    # codeEditor.setGeometry(100, 100, 800, 600)
-    codeEditor.show()
-    app.exec()
