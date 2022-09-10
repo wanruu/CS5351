@@ -13,11 +13,10 @@ class Window:
         UiFile.open(QFile.ReadOnly)
         UiFile.close()
 
-        self.ui = QUiLoader().load(UiFile)
+        loader = QUiLoader()
+        loader.registerCustomWidget(QTextEditWithLineNum)
 
-        self.ui.qtCodeArea = QTextEditWithLineNum(self.ui.qtCodeArea)
-        self.ui.qtElementArea = QTextEditWithLineNum(self.ui.qtElementArea)
-        # self.ui.qtMatrixArea = QTextEditWithLineNum(self.ui.qtElementArea)
+        self.ui = loader.load(UiFile)
 
 
 if __name__ == '__main__':
