@@ -52,6 +52,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="actionopen"/>
     <addaction name="actionsave"/>
+    <addaction name="separator"/>
+    <addaction name="actionopen_code"/>
    </widget>
    <addaction name="File"/>
   </widget>
@@ -63,6 +65,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionsave">
    <property name="text">
     <string>save...</string>
+   </property>
+  </action>
+  <action name="actionopen_code">
+   <property name="text">
+    <string>actionopen_code</string>
    </property>
   </action>
  </widget>

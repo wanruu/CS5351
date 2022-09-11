@@ -21,10 +21,23 @@ class Window:
 
         self.ui = loader.load(UiFile)
         self.ui.actionopen.triggered.connect(self.openExcelFile)
+        self.ui.actionopen_code.triggered.connect(self.openCodeFile)
+
+
+    def openCodeFile(self):
+        codeFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open file',
+                                                       '/Users/yunqizhao/PycharmProjects/CityU/demo',
+                                                       'Excel files(*.c, *.cpp, *.py)')
+
+        if len(codeFileName) > 0:
+            with open(codeFileName, 'r') as F:
+                codeLine = F.read()
+                self.ui.qtCodeArea.setText(codeLine)
+
 
     def openExcelFile(self):
         ExcelFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open file',
-                                                    '/Users/yunqizhao/PycharmProjects/CityU/demo', 'Excel files(*.xlsx , *.xls)')
+                                                    '/Users/yunqizhao/PycharmProjects/CityU/demo', 'Excel files(*.xlsx, *.xls)')
 
         if len(ExcelFileName) > 0:
             input_table = pd.read_excel(ExcelFileName)
