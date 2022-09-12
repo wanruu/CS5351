@@ -22,26 +22,42 @@ class Window:
         self.ui = loader.load(UiFile)
         self.ui.actionopen.triggered.connect(self.openExcelFile)
         self.ui.actionopen_code.triggered.connect(self.openCodeFile)
+        self.ui.qtMatrixArea.doubleClicked.connect(self.matrixAreaDoubleClicked)
+
+        self.openCodeFile('./demo/ps.py')
+        self.openExcelFile('./demo/Matrix_t.xlsx')
 
 
-    def openCodeFile(self):
-        codeFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open file',
-                                                       '/Users/yunqizhao/PycharmProjects/CityU/demo',
-                                                       'Excel files(*.c, *.cpp, *.py)')
+    def matrixAreaDoubleClicked(self):
+        row = self.ui.qtMatrixArea.currentIndex().row()
+        data = []
+        for i in range(self.ui.qtMatrixArea.columnCount()):
+            data.append(self.ui.qtMatrixArea.item(row, i).text())
+
+        print(data)
+        return data
+
+    def openCodeFile(self, codeFileName=None):
+
+        if not codeFileName:
+            codeFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open file',
+                                                          './demo',
+                                                          'Excel files(*.c , *.cpp , *.py)')
 
         if len(codeFileName) > 0:
             with open(codeFileName, 'r') as F:
                 codeLine = F.read()
                 self.ui.qtCodeArea.setText(codeLine)
 
+    def openExcelFile(self, ExcelFileName=None):
 
-    def openExcelFile(self):
-        ExcelFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open file',
-                                                    '/Users/yunqizhao/PycharmProjects/CityU/demo', 'Excel files(*.xlsx, *.xls)')
+        if not ExcelFileName:
+            ExcelFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open file',
+                                                           './demo', 'Excel files(*.xlsx , *.xls)')
 
         if len(ExcelFileName) > 0:
             input_table = pd.read_excel(ExcelFileName)
-            print(input_table)
+            # print(input_table)
             input_table_rows = input_table.shape[0]
             input_table_colunms = input_table.shape[1]
             # input_table_header = input_table.columns.values.tolist()
