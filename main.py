@@ -19,6 +19,8 @@ class Window:
         loader = QUiLoader()
         loader.registerCustomWidget(QTextEditWithLineNum)
 
+        self.choosen = []
+
         self.ui = loader.load(UiFile)
         self.ui.actionopen.triggered.connect(self.openExcelFile)
         self.ui.actionopen_code.triggered.connect(self.openCodeFile)
@@ -27,15 +29,48 @@ class Window:
         self.openCodeFile('./demo/ps.py')
         self.openExcelFile('./demo/Matrix_t.xlsx')
 
+    def changeBackgroundColorToRed(self):
+        label = self.choosen[0]
+
+        text = self.ui.qtCodeArea.document().toHtml().split('\n')
+
+        for _ in range(1, len(self.choosen)):
+            text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace("margin-top:0px;",
+                                                                          "margin-top:0px; background-color:red;",
+                                                                          1)
+
+        html = ""
+        for line in text:
+            html += line + '\n'
+
+        self.ui.qtCodeArea.setText(html)
+
+    def changeBackgroundColorToWhite(self):
+
+        text = self.ui.qtCodeArea.document().toHtml().split('\n')
+
+        for _ in range(1, len(self.choosen)):
+
+            text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(" background-color:#ff0000;",
+                                                                          ""
+                                                                          , 2)
+
+        html = ""
+        for line in text:
+            html += line + '\n'
+
+        self.ui.qtCodeArea.setText(html)
+        self.choosen = []
 
     def matrixAreaDoubleClicked(self):
-        row = self.ui.qtMatrixArea.currentIndex().row()
-        data = []
-        for i in range(self.ui.qtMatrixArea.columnCount()):
-            data.append(self.ui.qtMatrixArea.item(row, i).text())
 
-        print(data)
-        return data
+        self.changeBackgroundColorToWhite()
+
+        row = self.ui.qtMatrixArea.currentIndex().row()
+        for i in range(self.ui.qtMatrixArea.columnCount()):
+            self.choosen.append(int(self.ui.qtMatrixArea.item(row, i).text()))
+
+        self.changeBackgroundColorToRed()
 
     def openCodeFile(self, codeFileName=None):
 
