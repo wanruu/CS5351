@@ -30,6 +30,7 @@ class Window:
         self.openExcelFile('./demo/Matrix_t.xlsx')
 
     def changeBackgroundColorToRed(self):
+
         label = self.choosen[0]
 
         text = self.ui.qtCodeArea.document().toHtml().split('\n')
