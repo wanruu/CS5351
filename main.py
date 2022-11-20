@@ -156,6 +156,7 @@ class Window:
         text = self.ui.qtCodeArea.document().toHtml().split('\n')
 
         for _ in range(1, len(self.choosen)):
+            # color = #ff0000
             text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(" background-color:#ff0000;",
                                                                           ""
                                                                           , 2)
@@ -211,11 +212,16 @@ class Window:
             input_table_rows = input_table.shape[0]
             Line = ['test ' + str(i + 1) for i in range(input_table_rows)]
             input_table_colunms = input_table.shape[1]
-            sloc = ['code line ' + str(i + 1) for i in range(input_table_colunms)]
+
+            sloc = ['state']
+
+            for i in range(input_table_colunms - 1):
+                sloc.append('code line ' + str(i + 1))
 
             # input_table = pd.DataFrame(input_table, columns=sloc, index=Line)
             # print(input_table)
             # input_table_header = input_table.columns.values.tolist()
+
             self.ui.qtMatrixArea.setColumnCount(input_table_colunms)
             self.ui.qtMatrixArea.setRowCount(input_table_rows)
 
