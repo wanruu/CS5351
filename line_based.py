@@ -44,6 +44,11 @@ def barinel(testset):
     return 1 - Ncs / (Ncs + Ncf)
 
 
+def Tarantula(testset):
+    Ncf, Nuf, Ncs, Nus = get_paras(testset)
+    return (Ncf / (Nuf + Ncf)) / (Ncs / (Nus + Ncs) + Ncf / (Nuf + Ncf))
+
+
 if __name__ == "__main__":
     path = "../zzh-data/Code_Line_Corr/Experimental Data/"
     filename = "gzip-bug-2009-09-26-a1d3d4019d-f17cbd13a1/"
