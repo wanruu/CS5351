@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Bug Localization</string>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -25,21 +25,38 @@
         <item>
          <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>添加</string>
+           <string>append</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="pushButton_2">
+          <property name="styleSheet">
+           <string notr="true">image:url(:/background/run.png)</string>
+          </property>
+          <property name="inputMethodHints">
+           <set>Qt::ImhHiddenText</set>
+          </property>
           <property name="text">
-           <string>保存</string>
+           <string>link</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
+         <widget class="QPushButton" name="run">
+          <property name="styleSheet">
+           <string notr="true">MyPushButton{
+
+    border-style: outset;
+
+    border-width: 2px;
+
+    border-color: beige;
+
+}</string>
+          </property>
           <property name="text">
-           <string>运行</string>
+           <string>run</string>
           </property>
          </widget>
         </item>
@@ -147,6 +164,8 @@ p, li { white-space: pre-wrap; }
    <header location="global">qtexteditwithlinenum.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="source/source.qrc"/>
+ </resources>
  <connections/>
 </ui>

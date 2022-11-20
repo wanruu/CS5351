@@ -39,7 +39,7 @@ class Window:
         self.ui.qtMatrixArea.doubleClicked.connect(self.matrixAreaDoubleClicked)
         self.ui.pushButton.clicked.connect(self.clickButton)
         self.ui.pushButton_2.clicked.connect(self.getText)
-        self.ui.pushButton_3.clicked.connect(self.getAnswer)
+        self.ui.run.clicked.connect(self.getAnswer)
 
         self.openCodeFile('./demo/ps.py')
 
