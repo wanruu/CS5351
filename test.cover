@@ -1,0 +1,47 @@
+       
+    2: class number:
+       
+    1:     def sum_number(self, a, b):
+               return a+b
+       
+    1:     def sub_number(self, a, b):
+    1:         return a-b
+       
+    1:     def mul_number(self, a, b):
+               return a*b
+       
+    1:     def div_number(self, a, b):
+               if b != 0:
+                   return a/b
+               else:
+                   return 0
+       
+    1:     def number_to_bits(self, a, b):
+    1:         if a-b == 3:
+                   return self.sum_number(a, b)
+    1:         elif a-b == 4:
+    1:             return self.sub_number(a, b)
+               elif a-b == 5:
+                   return self.mul_number(a, b)
+               else:
+                   return self.div_number(a, b)
+       
+       
+       
+    1: if __name__ == '__main__':
+    1:     n = number()
+    1:     print(n.number_to_bits(7, 3))
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
+       
