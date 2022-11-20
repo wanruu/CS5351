@@ -20,6 +20,7 @@ class Window:
     def __init__(self):
 
         UiFile = QFile("UI.ui")
+        # UiFile =
         UiFile.open(QFile.ReadOnly)
         UiFile.close()
 
@@ -189,6 +190,6 @@ class Window:
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Window()
-    apply_stylesheet(app, theme='dark_purple.xml')
+    apply_stylesheet(app, theme='dark_lightgreen.xml')
     window.ui.show()
     app.exec()
