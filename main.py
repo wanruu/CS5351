@@ -1,5 +1,6 @@
 import sys
-from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QGridLayout, QFileDialog, QTableWidgetItem, QTextEdit
+from PySide6.QtWidgets import QApplication, QLabel, QMessageBox, QGridLayout, QFileDialog, QTableWidgetItem, QTextEdit, \
+    QHeaderView
 from PySide6.QtCore import QFile
 from PySide6.QtGui import QIcon
 from PySide6.QtUiTools import QUiLoader
@@ -54,7 +55,6 @@ class Window:
         self.algorithm = 'default'
 
     def chooseDstar(self):
-        # dstar ochiai barinel Tarantula
         self.algorithm = 'dstar'
 
     def chooseBarinel(self):
@@ -209,10 +209,19 @@ class Window:
             input_table = pd.read_excel(ExcelFileName)
             # print(input_table)
             input_table_rows = input_table.shape[0]
+            Line = ['test ' + str(i + 1) for i in range(input_table_rows)]
             input_table_colunms = input_table.shape[1]
+            sloc = ['code line ' + str(i + 1) for i in range(input_table_colunms)]
+
+            # input_table = pd.DataFrame(input_table, columns=sloc, index=Line)
+            # print(input_table)
             # input_table_header = input_table.columns.values.tolist()
             self.ui.qtMatrixArea.setColumnCount(input_table_colunms)
             self.ui.qtMatrixArea.setRowCount(input_table_rows)
+
+            self.ui.qtMatrixArea.setHorizontalHeaderLabels(sloc)
+            self.ui.qtMatrixArea.setVerticalHeaderLabels(Line)
+            self.ui.qtMatrixArea.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
             # self.ui.qtMatrixArea.setHorizontalHeaderLabels(input_table_header)
 
             for i in range(input_table_rows):

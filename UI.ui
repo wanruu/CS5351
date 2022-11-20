@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>505</height>
+    <width>1032</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,28 +39,20 @@
         <item>
          <widget class="QPushButton" name="pushButton_2">
           <property name="styleSheet">
-           <string notr="true">image:url(:/background/run.png)</string>
+           <string notr="true"/>
           </property>
           <property name="inputMethodHints">
            <set>Qt::ImhHiddenText</set>
           </property>
           <property name="text">
-           <string>link</string>
+           <string>save</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="run">
           <property name="styleSheet">
-           <string notr="true">MyPushButton{
-
-    border-style: outset;
-
-    border-width: 2px;
-
-    border-color: beige;
-
-}</string>
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>run</string>
@@ -72,7 +64,11 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
-         <widget class="QTextEditWithLineNum" name="qtCodeArea"/>
+         <widget class="QTextEditWithLineNum" name="qtCodeArea">
+          <property name="textInteractionFlags">
+           <set>Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="Line" name="line">
@@ -133,7 +129,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
+     <width>1032</width>
      <height>24</height>
     </rect>
    </property>
