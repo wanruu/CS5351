@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>674</width>
-    <height>422</height>
+    <width>701</width>
+    <height>508</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,32 +18,31 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>添加</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QTextEditWithLineNum" name="qtElementArea">
-      <property name="html">
-       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="2">
+    <item row="3" column="1">
      <widget class="QPushButton" name="pushButton_2">
       <property name="text">
        <string>保存</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="2">
+    <item row="2" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>添加</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="text">
+       <string>运行</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="7">
+     <widget class="QTextEditWithLineNum" name="qtCodeArea"/>
+    </item>
+    <item row="6" column="1">
      <widget class="QTableWidget" name="qtMatrixArea">
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
@@ -62,13 +61,14 @@ p, li { white-space: pre-wrap; }
       </attribute>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="6">
-     <widget class="QTextEditWithLineNum" name="qtCodeArea"/>
-    </item>
-    <item row="3" column="2">
-     <widget class="QPushButton" name="pushButton_3">
-      <property name="text">
-       <string>运行</string>
+    <item row="0" column="1">
+     <widget class="QTextEditWithLineNum" name="qtElementArea">
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -79,7 +79,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>674</width>
+     <width>701</width>
      <height>24</height>
     </rect>
    </property>

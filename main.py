@@ -10,6 +10,10 @@ import os
 from getnum import getLine
 from ft_based import cal_sus
 from get_result import get_result, get_errorLine, generateExcel
+from qt_material import apply_stylesheet
+
+from qt_material import apply_stylesheet
+
 
 class Window:
 
@@ -38,7 +42,6 @@ class Window:
 
         self.openCodeFile('./demo/ps.py')
 
-
     def getText(self):
 
         text = self.ui.qtCodeArea.document().toPlainText().split('\n')
@@ -51,12 +54,9 @@ class Window:
                 f.writelines('\n')
         f.close()
 
-
     def getFileName(self):
 
         return self.fileName
-
-
 
     def clickButton(self):
 
@@ -66,10 +66,10 @@ class Window:
         filename = self.getFileName()
         result = os.popen("Python3 -m trace --count -C . " + filename).read()
         answer = self.ui.qtElementArea.document().toPlainText()
-        #print(result)
-        #print(type(result))
-        #print(answer)
-        #print(type(answer))
+        # print(result)
+        # print(type(result))
+        # print(answer)
+        # print(type(answer))
         testLine = getLine(self.name)
         test_ = get_result(testLine, filename)
 
@@ -115,7 +115,6 @@ class Window:
         text = self.ui.qtCodeArea.document().toHtml().split('\n')
 
         for _ in range(1, len(self.choosen)):
-
             text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(" background-color:#ff0000;",
                                                                           ""
                                                                           , 2)
@@ -159,7 +158,6 @@ class Window:
                 codeLine = F.read()
                 self.ui.qtCodeArea.setText(codeLine)
 
-
     def openExcelFile(self, ExcelFileName=None):
 
         if not ExcelFileName:
@@ -187,8 +185,10 @@ class Window:
                     # newItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     self.ui.qtMatrixArea.setItem(i, j, newItem)
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Window()
+    apply_stylesheet(app, theme='dark_purple.xml')
     window.ui.show()
     app.exec()
