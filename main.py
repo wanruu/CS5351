@@ -32,16 +32,47 @@ class Window:
         self.name = None
         self.testCase = []
         self.line = 0
+        self.algorithm = 'default'
 
         self.ui = loader.load(UiFile)
+        self.ui.actiondefault.triggered.connect(self.chooseDefault)
         self.ui.actionopen.triggered.connect(self.openExcelFile)
         self.ui.actionopen_code.triggered.connect(self.openCodeFile)
         self.ui.qtMatrixArea.doubleClicked.connect(self.matrixAreaDoubleClicked)
         self.ui.pushButton.clicked.connect(self.clickButton)
         self.ui.pushButton_2.clicked.connect(self.getText)
         self.ui.run.clicked.connect(self.getAnswer)
+        self.ui.analyse.clicked.connect(self.getAnswer)
 
         self.openCodeFile('./demo/ps.py')
+
+    def chooseDefault(self):
+        self.algorithm = 'default'
+
+    def chooseDstar(self):
+        # dstar ochiai barinel Tarantula
+        self.algorithm = 'dstar'
+
+    def chooseBarinel(self):
+        self.algorithm = 'barinel'
+
+    def chooseOchiai(self):
+        self.algorithm = 'ochiai'
+
+    def chooseTarantula(self):
+        self.algorithm = 'Tarantula'
+
+    def analyse(self):
+        if self.algorithm == 'default':
+            pass
+        elif self.algorithm == 'dstar':
+            pass
+        elif self.algorithm == 'barinel':
+            pass
+        elif self.algorithm == 'ochiai':
+            pass
+        elif self.algorithm == 'Tarantula':
+            pass
 
     def getText(self):
 

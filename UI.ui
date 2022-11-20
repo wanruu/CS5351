@@ -23,6 +23,13 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QPushButton" name="analyse">
+          <property name="text">
+           <string>analyse</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButton">
           <property name="text">
            <string>append</string>
@@ -139,7 +146,18 @@ p, li { white-space: pre-wrap; }
     <addaction name="separator"/>
     <addaction name="actionopen_code"/>
    </widget>
+   <widget class="QMenu" name="menumethod">
+    <property name="title">
+     <string>method</string>
+    </property>
+    <addaction name="actiondefault"/>
+    <addaction name="actiondstar"/>
+    <addaction name="actionochiai"/>
+    <addaction name="actionbarinel"/>
+    <addaction name="actionTarantula"/>
+   </widget>
    <addaction name="File"/>
+   <addaction name="menumethod"/>
   </widget>
   <action name="actionopen">
    <property name="text">
@@ -154,6 +172,31 @@ p, li { white-space: pre-wrap; }
   <action name="actionopen_code">
    <property name="text">
     <string>code  open...</string>
+   </property>
+  </action>
+  <action name="actiondefault">
+   <property name="text">
+    <string>default</string>
+   </property>
+  </action>
+  <action name="actiondstar">
+   <property name="text">
+    <string>dstar</string>
+   </property>
+  </action>
+  <action name="actionochiai">
+   <property name="text">
+    <string>ochiai</string>
+   </property>
+  </action>
+  <action name="actionbarinel">
+   <property name="text">
+    <string>barinel</string>
+   </property>
+  </action>
+  <action name="actionTarantula">
+   <property name="text">
+    <string>Tarantula</string>
    </property>
   </action>
  </widget>
