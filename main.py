@@ -255,16 +255,30 @@ class Window:
         self.choosen = []
 
     def matrixAreaDoubleClicked(self):
-
         self.changeBackgroundColorToWhite()
 
+        # Get the sus value for each line.
         row = self.ui.qtMatrixArea.currentIndex().row()
-        for i in range(self.ui.qtMatrixArea.columnCount()):
-            if self.ui.qtMatrixArea.item(row, i).text() == 'nan':
-                break
-            self.choosen.append(int(self.ui.qtMatrixArea.item(row, i).text()))
+        cols = range(self.ui.qtMatrixArea. columnCount())
+        values = [self.ui.qtMatrixArea.item(row, col).text() for col in cols]
+
+        # Update invalid value.
+        valid_values = [float(value) for value in values if value != "nan" and value != "inf"]
+        min_value, max_value = min(valid_values), max(valid_values)
+        new_values = []
+        for value in values:
+            if value == "nan":
+                new_values.append(min_value-10)
+            elif value == "inf":
+                new_values. append(max_value+10)
+            else:
+                new_values. append(float(value))
+        # find index
+        full_sort = np.argsort(new_values)
+        self.choosen = [0] + list(full_sort[:int(len(values)/2)]+1)
 
         self.changeBackgroundColorToRed()
+
 
     def openCodeFile(self, codeFileName=None):
 
