@@ -154,14 +154,14 @@ def cal_sus(testset: [([int], int)], element_num: int) -> [(int, int)]:
     """
 
     # 1. 根据测试结果成功与否，将覆盖图谱分为D+与D-
-    d1 = [test_case for test_case in test_set if test_case[1] == 1]  # success
-    d2 = [test_case for test_case in test_set if test_case[1] == 0]  # fail
+    d1 = [test_case for test_case in testset if test_case[1] == 1]  # success
+    d2 = [test_case for test_case in testset if test_case[1] == 0]  # fail
 
     # 2. 可疑度初始化
     sus_list = [0 for i in range(element_num)]
 
     # 3. 遍历每一个测试样例
-    for test_case in test_set:
+    for test_case in testset:
         # 3.1. 计算该样例与所有正样例和负样例的曼哈顿距离，找到除本身外最近的样例
         dist_d1 = [(manhattan_dist(test_case, test_case_d1), test_case_d1) for test_case_d1 in d1 if test_case_d1 != test_case]
         dist_d2 = [(manhattan_dist(test_case, test_case_d2), test_case_d2) for test_case_d2 in d2 if test_case_d2 != test_case]
@@ -179,7 +179,7 @@ def cal_sus(testset: [([int], int)], element_num: int) -> [(int, int)]:
             sus_list[element] += defect_co_stat
 
 
-    final_list = [(index, value/len(test_set)) for index, value in enumerate(sus_list)]
+    final_list = [(index, value/len(testset)) for index, value in enumerate(sus_list)]
     # 排序后返回元素的可疑度排序
     # final_list.sort(key=lambda x: x[1], reverse=True)
     return final_list
