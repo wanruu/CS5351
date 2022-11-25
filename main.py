@@ -14,6 +14,7 @@ from get_result import get_result, get_errorLine, generateExcel
 from qt_material import apply_stylesheet
 
 from qt_material import apply_stylesheet
+from utils import *
 
 
 class Window:
@@ -32,8 +33,12 @@ class Window:
         self.fileName = None
         self.name = None
         self.testCase = []
+        self.testCasesInput = []
+        self.testCasesOutput = []
         self.line = 0
         self.algorithm = 'default'
+
+        self.colorbar = ['ff0000', 'c43242', 'dc3a38', 'e4734e', 'eda15d']
 
         self.ui = loader.load(UiFile)
         self.ui.actiondefault.triggered.connect(self.chooseDefault)
@@ -67,6 +72,14 @@ class Window:
         self.algorithm = 'Tarantula'
 
     def analyse(self):
+        print("ok")
+
+        text = self.ui.qtElementArea.document().toPlainText()
+
+        self.testCasesInput, self.testCasesOutput = getTestCases(text)
+
+        print(self.testCasesInput, self.testCasesOutput)
+
         if self.algorithm == 'default':
             print("ok!")
             pass
@@ -140,9 +153,12 @@ class Window:
 
         text = self.ui.qtCodeArea.document().toHtml().split('\n')
 
+        # color =  #
         for _ in range(1, len(self.choosen)):
             text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace("margin-top:0px;",
-                                                                          "margin-top:0px; background-color:red;",
+                                                                          "margin-top:0px; background-color:#" +
+                                                                          self.colorbar[
+                                                                              min(len(self.colorbar) - 1, _ - 1)] + ";",
                                                                           1)
 
         html = ""
@@ -157,9 +173,10 @@ class Window:
 
         for _ in range(1, len(self.choosen)):
             # color = #ff0000
-            text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(" background-color:#ff0000;",
-                                                                          ""
-                                                                          , 2)
+            for i in range(len(self.colorbar)):
+                text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(" background-color:#"+self.colorbar[i]+";",
+                                                                              ""
+                                                                              , 2)
 
         html = ""
         for line in text:
