@@ -109,12 +109,14 @@ class Window:
         # For testing
         self.testMatrix = [[1,1,0],[1,0,1]]
         self.testCaseLabel = [1,0]
+
         if not self.testMatrix:
             return
+        lines_num = len(self.testMatrix[0])
 
         # ---- Default Algo ----
         # Process the code in ./demo/ps.py.
-        lines_group = [[0,1,2]]  # split_code_from_file("./demo/ps.py")
+        lines_group = [[0,1,2]] # split_code_from_file("./demo/ps.py")
         # Generate testset for default algo.
         testset_default = []
         for idx in range(len(self.testCaseLabel)):
@@ -140,14 +142,26 @@ class Window:
 
         # ---- Format ----
         result_dict = {
-            "Default": result_default,
+            "Default": np.array(result_default, dtype='f'),
             "Dstar": result_dstar,
             "Barinel": result_barinel,
             "Ochiai": result_ochiai,
             "Tarantula": result_tarantula
         }
+        headers = result_dict.keys()
 
-        return pd.DataFrame.from_dict(result_dict)
+
+        # ---- Visualize ----
+        self.ui.qtMatrixArea.setColumnCount(len(self.testMatrix[0]))
+        self.ui.qtMatrixArea.setRowCount(len(result_dict))
+        self.ui.qtMatrixArea.setHorizontalHeaderLabels([f"LINE {idx+1}" for idx in range(lines_num)])
+        self.ui.qtMatrixArea.setVerticalHeaderLabels(headers)
+        self.ui.qtMatrixArea.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        for i, header in enumerate(headers):
+            sus = np.around(result_dict.get(header), 2)
+            for j in range(lines_num):
+                item = QTableWidgetItem(str(sus[j]))
+                self.ui.qtMatrixArea.setItem(i, j, item)
 
 
     def getText(self):
