@@ -32,7 +32,7 @@
         <item>
          <widget class="QPushButton" name="pushButton">
           <property name="text">
-           <string>append</string>
+           <string>add testcase</string>
           </property>
          </widget>
         </item>

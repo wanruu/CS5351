@@ -174,6 +174,8 @@ class Window:
 
         row = self.ui.qtMatrixArea.currentIndex().row()
         for i in range(self.ui.qtMatrixArea.columnCount()):
+            if self.ui.qtMatrixArea.item(row, i).text() == 'nan':
+                break
             self.choosen.append(int(self.ui.qtMatrixArea.item(row, i).text()))
 
         self.changeBackgroundColorToRed()
@@ -207,7 +209,8 @@ class Window:
                                                            './demo', 'Excel files(*.xlsx , *.xls)')
 
         if len(ExcelFileName) > 0:
-            input_table = pd.read_excel(ExcelFileName)
+            input_table = pd.read_excel(ExcelFileName, header=None)
+            input_table = input_table.astype("int")
             # print(input_table)
             input_table_rows = input_table.shape[0]
             Line = ['test ' + str(i + 1) for i in range(input_table_rows)]
