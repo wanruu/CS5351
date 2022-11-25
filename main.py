@@ -9,7 +9,8 @@ import pandas as pd
 import numpy as np
 import os
 from getnum import getLine
-from ft_based import cal_sus
+from ft_based import cal_sus, split_code_from_file
+from line_based import dstar, ochiai, barinel, Tarantula
 from get_result import get_result, get_errorLine, generateExcel
 from qt_material import apply_stylesheet
 
@@ -105,29 +106,49 @@ class Window:
         self.algorithm = 'Tarantula'
 
     def analyse(self):
-        print("ok")
+        # For testing
+        self.testMatrix = [[1,1,0],[1,0,1]]
+        self.testCaseLabel = [1,0]
+        if not self.testMatrix:
+            return
 
-        text = self.ui.qtElementArea.document().toPlainText()
+        # ---- Default Algo ----
+        # Process the code in ./demo/ps.py.
+        lines_group = [[0,1,2]]  # split_code_from_file("./demo/ps.py")
+        # Generate testset for default algo.
+        testset_default = []
+        for idx in range(len(self.testCaseLabel)):
+            label = self.testCaseLabel[idx]
+            line_covs = self.testMatrix[idx]  # one-hot list
+            cov_lines = [j for j in range(len(line_covs)) if line_covs[j] == 1]  # list of line index
+            cov_blocks = [j for j in range(len(lines_group)) if set(lines_group[j])&set(cov_lines)]  # list of block index
+            testset_default.append((cov_blocks, label))
+        # Run the default algo.
+        result_tmp = cal_sus(testset_default, len(lines_group))  # [(block idx, sus)]
+        # Generate from block to line
+        result_default = [0 for _ in self.testMatrix[0]]
+        for block_idx, sus in result_tmp:
+            for line in lines_group[block_idx]:
+                result_default[line] = max(result_default[line], sus)
 
-        self.testCasesInput, self.testCasesOutput = getTestCases(text)
+        # ---- Other 4 Algos ----
+        testset = [(self.testMatrix[idx], self.testCaseLabel[idx]) for idx in range(len(self.testCaseLabel))]
+        result_dstar = dstar(testset)
+        result_barinel = barinel(testset)
+        result_ochiai = ochiai(testset)
+        result_tarantula = Tarantula(testset)
 
-        print(self.testCasesInput, self.testCasesOutput)
+        # ---- Format ----
+        result_dict = {
+            "Default": result_default,
+            "Dstar": result_dstar,
+            "Barinel": result_barinel,
+            "Ochiai": result_ochiai,
+            "Tarantula": result_tarantula
+        }
 
-        if self.algorithm == 'default':
-            print("ok!")
-            pass
-        elif self.algorithm == 'dstar':
-            print("ok!!")
-            pass
-        elif self.algorithm == 'barinel':
-            print("ok!!!")
-            pass
-        elif self.algorithm == 'ochiai':
-            print("ok!!!!")
-            pass
-        elif self.algorithm == 'Tarantula':
-            print("ok!!!!!")
-            pass
+        return pd.DataFrame.from_dict(result_dict)
+
 
     def getText(self):
 
