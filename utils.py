@@ -32,11 +32,11 @@ def getTestCases(text: str):
         O = re.split('[ ,]', outputline)
         for _ in range(len(I)):
             if len(I[_]) > 0 and I[_] in '0123456789':
-                I[_] = int(I[_])
+                I[_] = float(I[_])
 
         for _ in range(len(O)):
             if len(O[_]) > 0 and O[_] in '0123456789':
-                O[_] = int(O[_])
+                O[_] = float(O[_])
 
         # print("ok", I, O)
 
@@ -44,3 +44,13 @@ def getTestCases(text: str):
         reto.append(O)
     # print(reti, reto)
     return reti, reto
+
+
+def getmainlinenum(codefile: str):
+    ppp = codefile.split('\n')
+    num = -1
+    for i in range(len(ppp)):
+        # print(ppp[i])
+        if ppp[i] == 'if __name__ == \'__main__\':':
+            num = i + 1
+    return num

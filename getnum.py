@@ -6,7 +6,7 @@ def getLine(name):
     index = 1
     numlist = []
     z = r"    \d"
-    file_path = r'.'+name+'.cover'
+    file_path = r''+name+'.cover'
     data = []
     # #读取
     with open(file_path, encoding='utf-8', ) as txtfile:

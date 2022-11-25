@@ -1,24 +1,26 @@
-def quick_sort(data):
+import sys
 
-    if len(data) >= 2:
-        mid = data[len(data) // 2]
-        left, right = [], []
-        data.remove(mid)
-        for num in data:
-            if num >= mid:
-                right.append(num)
-            else:
-                left.append(num)
-        return quick_sort(left) + [mid] + quick_sort(right)
+
+def mid(x, y, z):
+    m = z
+    if y < z:
+        if x < y:
+            m = y
+        elif x < z:
+            m = y
     else:
-        return data
+        if x > y:
+            m = y
+        elif x > z:
+            m = x
+    return m
 
 
 if __name__ == '__main__':
-    num_ = eval(input())
-    data = []
-    for i in range(num_):
-        data.append(input())
-    sorted_data = quick_sort(data)
-    for i in sorted_data:
-        print(i)
+    a = float(input())
+    b = float(input())
+    c = float(input())
+
+    d = mid(a, b, c)
+
+    print(d)
