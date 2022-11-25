@@ -141,6 +141,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionsave"/>
     <addaction name="separator"/>
     <addaction name="actionopen_code"/>
+    <addaction name="actionload_test_case"/>
    </widget>
    <widget class="QMenu" name="menumethod">
     <property name="title">
@@ -193,6 +194,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionTarantula">
    <property name="text">
     <string>Tarantula</string>
+   </property>
+  </action>
+  <action name="actionload_test_case">
+   <property name="text">
+    <string>load test case</string>
    </property>
   </action>
  </widget>

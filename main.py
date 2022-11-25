@@ -17,6 +17,12 @@ from qt_material import apply_stylesheet
 from utils import *
 
 
+# [1,2,3,4] {5}
+# [1] {0}
+# [] {}
+# [1] {1,2,3,4}
+# [199999 200] {201, 200000}
+
 class Window:
 
     def __init__(self):
@@ -38,7 +44,7 @@ class Window:
         self.line = 0
         self.algorithm = 'default'
 
-        self.colorbar = ['ff0000', 'c43242', 'dc3a38', 'e4734e', 'eda15d']
+        self.colorbar = ['ff0000', 'c43242', 'dc3a38', 'e4734e', 'e58db4']
 
         self.ui = loader.load(UiFile)
         self.ui.actiondefault.triggered.connect(self.chooseDefault)
@@ -48,6 +54,8 @@ class Window:
         self.ui.actionTarantula.triggered.connect(self.chooseTarantula)
         self.ui.actionopen.triggered.connect(self.openExcelFile)
         self.ui.actionopen_code.triggered.connect(self.openCodeFile)
+        self.ui.actionload_test_case.triggered.connect(self.openTestCaseFile)
+
         self.ui.qtMatrixArea.doubleClicked.connect(self.matrixAreaDoubleClicked)
         self.ui.pushButton.clicked.connect(self.clickButton)
         self.ui.pushButton_2.clicked.connect(self.getText)
@@ -55,6 +63,31 @@ class Window:
         self.ui.analyse.clicked.connect(self.analyse)
 
         self.openCodeFile('./demo/ps.py')
+        self.openTestCaseFile('./demo/demo_testcase.txt')
+
+    def openTestCaseFile(self, testCaseFileName=None):
+        # self.testCase = []
+        # self.line = 0
+
+        if not testCaseFileName:
+            testCaseFileName, _ = QFileDialog.getOpenFileName(self.ui, 'open test case file',
+                                                              './demo',
+                                                              'Excel files(*.txt)')
+
+        # self.fileName = testCaseFileName
+        print(testCaseFileName)
+
+        # index = -1
+        # while (testCaseFileName[index] != '/'):
+        #     index -= 1
+        # self.name = codeFileName[index:-3]
+
+        if len(testCaseFileName) > 0:
+            with open(testCaseFileName, 'r') as F:
+                # print("ok")
+                testCaseLine = F.read()
+                # print(testCaseLine)
+                self.ui.qtElementArea.setText(testCaseLine)
 
     def chooseDefault(self):
         self.algorithm = 'default'
@@ -174,9 +207,10 @@ class Window:
         for _ in range(1, len(self.choosen)):
             # color = #ff0000
             for i in range(len(self.colorbar)):
-                text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(" background-color:#"+self.colorbar[i]+";",
-                                                                              ""
-                                                                              , 2)
+                text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace(
+                    " background-color:#" + self.colorbar[i] + ";",
+                    ""
+                    , 2)
 
         html = ""
         for line in text:
