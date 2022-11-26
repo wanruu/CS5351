@@ -36,12 +36,18 @@ class Window:
         loader = QUiLoader()
         loader.registerCustomWidget(QTextEditWithLineNum)
 
+        self.INPUTFILEPATH = './demo/input.txt'
+        self.OUTPUTFILEPATH = './demo/output.txt'
+        self.COPYCODEPATH = './demo/ps_code.py'
+
         self.choosen = []
         self.fileName = None
         self.name = None
         self.testCase = []
         self.testCasesInput = []
         self.testCasesOutput = []
+        self.testCaseLabel = []
+        self.testMatrix = []
         self.line = 0
         self.algorithm = 'default'
 
@@ -105,64 +111,165 @@ class Window:
     def chooseTarantula(self):
         self.algorithm = 'Tarantula'
 
+    def more(self, input_, output_):
+        for i in range(len(input_)):
+            with open(self.INPUTFILEPATH[:-4] + str(i) + self.INPUTFILEPATH[-4:], 'w') as F:
+                print(input_[i])
+                for j in range(len(input_[i])):
+                    # print()
+                    F.write(str(input_[i][j]) + '\n')
+
+        for i in range(len(output_)):
+            with open(self.OUTPUTFILEPATH[:-4] + str(i) + self.OUTPUTFILEPATH[-4:], 'w') as F:
+                for j in range(len(output_[i])):
+                    F.write(str(output_[i][j]) + '\n')
+
+    def getlm(self):
+        retLabel, matrix = [], []
+
+        # print(len(self.testCasesOutput))
+        for i in range(len(self.testCasesOutput)):
+
+            # print(i)
+            # print("ok")
+            ipath = self.INPUTFILEPATH[:-4] + str(i) + self.INPUTFILEPATH[-4:]
+            opath = self.OUTPUTFILEPATH[:-4] + str(i) + self.OUTPUTFILEPATH[-4:]
+
+            code_copy = self.ui.qtCodeArea.document().toPlainText()
+
+            # print(code_copy)
+            # print("if __name__ == \'__main__\':\n    sys.stdin = open(\"" + ipath + "\", \"r\")\n",
+            #       "   sys.stdout = open(\"" + opath + "\", \"w\")\n")
+            code_copy = code_copy.replace("if __name__ == \'__main__\':\n",
+                                          "if __name__ == \'__main__\':\n    sys.stdin = open(\"" + ipath + "\", \"r\")\n    sys.stdout = open(\"" + opath + "\", \"w\")\n")
+
+            # print(code_copy)
+
+            num = getmainlinenum(code_copy)
+
+            with open(self.COPYCODEPATH, 'w') as F:
+                F.write(code_copy)
+
+                os.popen("Python3 -m trace --count -C . " + self.COPYCODEPATH).read()
+
+                p = getLine('ps_copy')
+
+                okm = []
+                for ind in range(len(p)):
+                    if 3 < p[ind] - num:
+                        okm.append(p[ind] - 3)
+                    elif p[ind] < num:
+                        okm.append(p[ind])
+
+            matrix.append(okm)
+            ans = []
+            with open(opath, 'r') as F:
+                for line in F.readlines():
+                    if len(line) > 1 and line[0] in '1234567890':
+                        ans.append(float(line))
+                    else:
+                        ans.append(line)
+
+            # print('ans:', ans)
+            # print('out:', self.testCasesOutput[i])
+
+            if len(ans) != len(self.testCasesOutput[i]):
+                retLabel.append(False)
+            else:
+                ok = True
+                for ___ in range(len(self.testCasesOutput[i])):
+                    if isinstance(ans[___], float) and isinstance(self.testCasesOutput[i][___], float):
+                        if -1e-10 <= ans[___] - self.testCasesOutput[i][___] <= 1e-10:
+                            continue
+                        else:
+                            ok = False
+
+                    elif isinstance(ans[___], str) and isinstance(self.testCasesOutput[i][___], str):
+                        if ans[___] == self.testCasesOutput[i][___]:
+                            continue
+                        else:
+                            ok = False
+                            break
+                    else:
+                        ok = False
+                        break
+                retLabel.append(ok)
+
+                # os.remove(ipath)
+                # os.remove(optah)
+        # os.remove(self.OUTPUTFILEPATH)
+
+        # print(len(retLabel), len(matrix))
+        # print(retLabel, matrix)
+
+        return retLabel, matrix
+
     def analyse(self):
         # For testing
-        self.testMatrix = [[1,1,0],[1,0,1]]
-        self.testCaseLabel = [1,0]
+        # self.testMatrix = [[1,1,0],[1,0,1]]
+        # self.testCaseLabel = [1,0]
+        testCaseSet = self.ui.qtElementArea.document().toPlainText()
 
-        if not self.testMatrix:
-            return
-        lines_num = len(self.testMatrix[0])
+        self.testCasesInput, self.testCasesOutput = getTestCases(testCaseSet)
 
-        # ---- Default Algo ----
-        # Process the code in ./demo/ps.py.
-        lines_group = [[0,1,2]] # split_code_from_file("./demo/ps.py")
-        # Generate testset for default algo.
-        testset_default = []
-        for idx in range(len(self.testCaseLabel)):
-            label = self.testCaseLabel[idx]
-            line_covs = self.testMatrix[idx]  # one-hot list
-            cov_lines = [j for j in range(len(line_covs)) if line_covs[j] == 1]  # list of line index
-            cov_blocks = [j for j in range(len(lines_group)) if set(lines_group[j])&set(cov_lines)]  # list of block index
-            testset_default.append((cov_blocks, label))
-        # Run the default algo.
-        result_tmp = cal_sus(testset_default, len(lines_group))  # [(block idx, sus)]
-        # Generate from block to line
-        result_default = [0 for _ in self.testMatrix[0]]
-        for block_idx, sus in result_tmp:
-            for line in lines_group[block_idx]:
-                result_default[line] = max(result_default[line], sus)
+        self.more(self.testCasesInput, self.testCasesOutput)
 
-        # ---- Other 4 Algos ----
-        testset = [(self.testMatrix[idx], self.testCaseLabel[idx]) for idx in range(len(self.testCaseLabel))]
-        result_dstar = dstar(testset)
-        result_barinel = barinel(testset)
-        result_ochiai = ochiai(testset)
-        result_tarantula = Tarantula(testset)
+        self.testCaseLabel, self.testMatrix = self.getlm()
 
-        # ---- Format ----
-        result_dict = {
-            "Default": np.array(result_default, dtype='f'),
-            "Dstar": result_dstar,
-            "Barinel": result_barinel,
-            "Ochiai": result_ochiai,
-            "Tarantula": result_tarantula
-        }
-        headers = result_dict.keys()
+        print(self.testMatrix, self.testMatrix)
 
-
-        # ---- Visualize ----
-        self.ui.qtMatrixArea.setColumnCount(len(self.testMatrix[0]))
-        self.ui.qtMatrixArea.setRowCount(len(result_dict))
-        self.ui.qtMatrixArea.setHorizontalHeaderLabels([f"LINE {idx+1}" for idx in range(lines_num)])
-        self.ui.qtMatrixArea.setVerticalHeaderLabels(headers)
-        self.ui.qtMatrixArea.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        for i, header in enumerate(headers):
-            sus = np.around(result_dict.get(header), 2)
-            for j in range(lines_num):
-                item = QTableWidgetItem(str(sus[j]))
-                self.ui.qtMatrixArea.setItem(i, j, item)
-
+        # if not self.testMatrix:
+        #     return
+        # lines_num = len(self.testMatrix[0])
+        #
+        # # ---- Default Algo ----
+        # # Process the code in ./demo/ps.py.
+        # lines_group = [[0, 1, 2]]  # split_code_from_file("./demo/ps.py")
+        # # Generate testset for default algo.
+        # testset_default = []
+        # for idx in range(len(self.testCaseLabel)):
+        #     label = self.testCaseLabel[idx]
+        #     line_covs = self.testMatrix[idx]  # one-hot list
+        #     cov_lines = [j for j in range(len(line_covs)) if line_covs[j] == 1]  # list of line index
+        #     cov_blocks = [j for j in range(len(lines_group)) if
+        #                   set(lines_group[j]) & set(cov_lines)]  # list of block index
+        #     testset_default.append((cov_blocks, label))
+        # # Run the default algo.
+        # result_tmp = cal_sus(testset_default, len(lines_group))  # [(block idx, sus)]
+        # # Generate from block to line
+        # result_default = [0 for _ in self.testMatrix[0]]
+        # for block_idx, sus in result_tmp:
+        #     for line in lines_group[block_idx]:
+        #         result_default[line] = max(result_default[line], sus)
+        #
+        # # ---- Other 4 Algos ----
+        # testset = [(self.testMatrix[idx], self.testCaseLabel[idx]) for idx in range(len(self.testCaseLabel))]
+        # result_dstar = dstar(testset)
+        # result_barinel = barinel(testset)
+        # result_ochiai = ochiai(testset)
+        # result_tarantula = Tarantula(testset)
+        #
+        # # ---- Format ----
+        # result_dict = {
+        #     "Default": np.array(result_default, dtype='f'),
+        #     "Dstar": result_dstar,
+        #     "Barinel": result_barinel,
+        #     "Ochiai": result_ochiai,
+        #     "Tarantula": result_tarantula
+        # }
+        # headers = result_dict.keys()
+        #
+        # # ---- Visualize ----
+        # self.ui.qtMatrixArea.setColumnCount(len(self.testMatrix[0]))
+        # self.ui.qtMatrixArea.setRowCount(len(result_dict))
+        # self.ui.qtMatrixArea.setHorizontalHeaderLabels([f"LINE {idx + 1}" for idx in range(lines_num)])
+        # self.ui.qtMatrixArea.setVerticalHeaderLabels(headers)
+        # self.ui.qtMatrixArea.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        # for i, header in enumerate(headers):
+        #     sus = np.around(result_dict.get(header), 2)
+        #     for j in range(lines_num):
+        #         item = QTableWidgetItem(str(sus[j]))
+        #         self.ui.qtMatrixArea.setItem(i, j, item)
 
     def getText(self):
 
@@ -226,7 +333,8 @@ class Window:
             text[self.choosen[_] + 4] = text[self.choosen[_] + 4].replace("margin-top:0px;",
                                                                           "margin-top:0px; background-color:#" +
                                                                           self.colorbar[
-                                                                              min(len(self.colorbar) - 1, _ - 1)] + ";",
+                                                                              min(len(self.colorbar) - 1,
+                                                                                  _ - 1)] + ";",
                                                                           1)
 
         html = ""

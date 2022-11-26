@@ -31,11 +31,11 @@ def getTestCases(text: str):
         I = re.split('[ ,]', inputline)
         O = re.split('[ ,]', outputline)
         for _ in range(len(I)):
-            if len(I[_]) > 0 and I[_] in '0123456789':
+            if len(I[_]) > 0 and I[_][0] in '0123456789':
                 I[_] = float(I[_])
 
         for _ in range(len(O)):
-            if len(O[_]) > 0 and O[_] in '0123456789':
+            if len(O[_]) > 0 and O[_][0] in '0123456789':
                 O[_] = float(O[_])
 
         # print("ok", I, O)
