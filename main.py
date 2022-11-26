@@ -157,9 +157,9 @@ class Window:
             okm = []
             for ind in range(len(p)):
                 if 3 < p[ind] - num:
-                    okm.append(p[ind] - 3)
+                    okm.append(p[ind] - 4)
                 elif p[ind] < num:
-                    okm.append(p[ind])
+                    okm.append(p[ind]- 3)
 
             matrix.append(okm)
             ans = []
