@@ -38,7 +38,7 @@ class Window:
 
         self.INPUTFILEPATH = './demo/input.txt'
         self.OUTPUTFILEPATH = './demo/output.txt'
-        self.COPYCODEPATH = './demo/ps_code.py'
+        self.COPYCODEPATH = './demo/ps_copy.py'
 
         self.choosen = []
         self.fileName = None
@@ -150,16 +150,16 @@ class Window:
             with open(self.COPYCODEPATH, 'w') as F:
                 F.write(code_copy)
 
-                os.popen("Python3 -m trace --count -C . " + self.COPYCODEPATH).read()
+            os.popen("Python3 -m trace --count -C . " + self.COPYCODEPATH).read()
 
-                p = getLine('ps_copy')
+            p = getLine('ps_copy')
 
-                okm = []
-                for ind in range(len(p)):
-                    if 3 < p[ind] - num:
-                        okm.append(p[ind] - 3)
-                    elif p[ind] < num:
-                        okm.append(p[ind])
+            okm = []
+            for ind in range(len(p)):
+                if 3 < p[ind] - num:
+                    okm.append(p[ind] - 3)
+                elif p[ind] < num:
+                    okm.append(p[ind])
 
             matrix.append(okm)
             ans = []
@@ -195,9 +195,9 @@ class Window:
                         break
                 retLabel.append(ok)
 
-                # os.remove(ipath)
-                # os.remove(optah)
-        # os.remove(self.OUTPUTFILEPATH)
+                os.remove(ipath)
+                os.remove(opath)
+        os.remove(self.COPYCODEPATH)
 
         # print(len(retLabel), len(matrix))
         # print(retLabel, matrix)
@@ -367,7 +367,7 @@ class Window:
 
         # Get the sus value for each line.
         row = self.ui.qtMatrixArea.currentIndex().row()
-        cols = range(self.ui.qtMatrixArea. columnCount())
+        cols = range(self.ui.qtMatrixArea.columnCount())
         values = [self.ui.qtMatrixArea.item(row, col).text() for col in cols]
 
         # Update invalid value.
@@ -376,17 +376,16 @@ class Window:
         new_values = []
         for value in values:
             if value == "nan":
-                new_values.append(min_value-10)
+                new_values.append(min_value - 10)
             elif value == "inf":
-                new_values. append(max_value+10)
+                new_values.append(max_value + 10)
             else:
-                new_values. append(float(value))
+                new_values.append(float(value))
         # find index
         full_sort = np.argsort(new_values)
-        self.choosen = [0] + list(full_sort[:int(len(values)/2)]+1)
+        self.choosen = [0] + list(full_sort[:int(len(values) / 2)] + 1)
 
         self.changeBackgroundColorToRed()
-
 
     def openCodeFile(self, codeFileName=None):
 
