@@ -6,7 +6,8 @@ def mid(x, y, z):
     if y < z:
         if x < y:
             m = y
-        elif x < z:
+        # elif x < z:
+        elif y < z:
             m = y
     else:
         if x > y:

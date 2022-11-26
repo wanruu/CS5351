@@ -38,11 +38,12 @@ class Window:
 
         self.INPUTFILEPATH = './demo/input.txt'
         self.OUTPUTFILEPATH = './demo/output.txt'
-        self.COPYCODEPATH = './demo/ps_copy.py'
+        self.COPYCODEPATH = ''
+        self.PYTHONCODEFILENAME = 'sequence'
 
         self.choosen = []
         self.fileName = None
-        self.testCaseFileName = './demo/demo_testcase.txt'
+        self.testCaseFileName = './demo/sequence.txt'
         self.name = None
         self.testCase = []
         self.testCasesInput = []
@@ -70,14 +71,13 @@ class Window:
         # self.ui.run.clicked.connect(self.getAnswer)
         self.ui.analyse.clicked.connect(self.analyse)
 
-        self.openCodeFile('./demo/ps.py')
-        self.openTestCaseFile('./demo/demo_testcase.txt')
+        self.openCodeFile('./demo/sequence.py')
+        self.openTestCaseFile('./demo/sequence.txt')
 
     def saveTestCaseFile(self):
         txt = self.ui.qtElementArea.document().toPlainText()
         with open(self.testCaseFileName, 'w') as F:
             F.write(txt)
-
 
     def openTestCaseFile(self, testCaseFileName=None):
         # self.testCase = []
@@ -127,8 +127,10 @@ class Window:
                     F.write(str(input_[i][j]) + '\n')
 
         for i in range(len(output_)):
+            # print(self.OUTPUTFILEPATH[:-4] + str(i) + self.OUTPUTFILEPATH[-4:])
             with open(self.OUTPUTFILEPATH[:-4] + str(i) + self.OUTPUTFILEPATH[-4:], 'w') as F:
                 for j in range(len(output_[i])):
+                    # print(str(output_[i][j]) + '\n')
                     F.write(str(output_[i][j]) + '\n')
 
     def getlm(self):
@@ -159,9 +161,12 @@ class Window:
             with open(self.COPYCODEPATH, 'w') as F:
                 F.write(code_copy)
 
-            os.popen("Python3 -m trace --count -C . " + self.COPYCODEPATH).read()
+            print('？？？？',self.COPYCODEPATH)
+            result = os.popen("Python3 -m trace --count -C . " + self.COPYCODEPATH).read()
 
-            p = getLine('ps_copy')
+            print(self.COPYCODEPATH.split('/')[-1][:-8] + '_copy')
+            p = getLine(self.COPYCODEPATH.split('/')[-1][:-8] + '_copy')
+
 
             okm = []
 
@@ -218,7 +223,6 @@ class Window:
                 os.remove(opath)
         os.remove(self.COPYCODEPATH)
 
-
         # print(len(retLabel), len(matrix))
         # print(retLabel, matrix)
 
@@ -243,8 +247,8 @@ class Window:
         lines_num = len(self.testMatrix[0])
 
         # ---- Default Algo ----
-        # Process the code in ./demo/ps.py.
-        lines_group = [[0, 1, 2]]  # split_code_from_file("./demo/ps.py")
+        # Process the code in ./demo/branch.py.
+        lines_group = [[0, 1, 2]]  # split_code_from_file("./demo/branch.py")
         # Generate testset for default algo.
         testset_default = []
         for idx in range(len(self.testCaseLabel)):
@@ -313,6 +317,7 @@ class Window:
         rootPath = os.path.split(curPath)[0]
         sys.path.append(rootPath)
         filename = self.getFileName()
+        print(filename)
         result = os.popen("Python3 -m trace --count -C . " + filename).read()
         answer = self.ui.qtElementArea.document().toPlainText()
         # print(result)
@@ -418,6 +423,10 @@ class Window:
                                                           'Excel files(*.c , *.cpp , *.py)')
 
         self.fileName = codeFileName
+        print(self.fileName)
+        # print(self.fileName.split('.')[-2].split('/')[-1])
+        self.PYTHONCODEFILENAME = self.fileName.split('.')[-2].split('/')[-1]
+        self.COPYCODEPATH = './demo/' + self.PYTHONCODEFILENAME + '_copy.py'
 
         index = -1
         while (codeFileName[index] != '/'):
