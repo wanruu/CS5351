@@ -42,6 +42,7 @@ class Window:
 
         self.choosen = []
         self.fileName = None
+        self.testCaseFileName = './demo/demo_testcase.txt'
         self.name = None
         self.testCase = []
         self.testCasesInput = []
@@ -64,13 +65,19 @@ class Window:
         self.ui.actionload_test_case.triggered.connect(self.openTestCaseFile)
 
         self.ui.qtMatrixArea.doubleClicked.connect(self.matrixAreaDoubleClicked)
-        self.ui.pushButton.clicked.connect(self.clickButton)
-        self.ui.pushButton_2.clicked.connect(self.getText)
-        self.ui.run.clicked.connect(self.getAnswer)
+        # self.ui.pushButton.clicked.connect(self.clickButton)
+        self.ui.save.clicked.connect(self.saveTestCaseFile)
+        # self.ui.run.clicked.connect(self.getAnswer)
         self.ui.analyse.clicked.connect(self.analyse)
 
         self.openCodeFile('./demo/ps.py')
         self.openTestCaseFile('./demo/demo_testcase.txt')
+
+    def saveTestCaseFile(self):
+        txt = self.ui.qtElementArea.document().toPlainText()
+        with open(self.testCaseFileName, 'w') as F:
+            F.write(txt)
+
 
     def openTestCaseFile(self, testCaseFileName=None):
         # self.testCase = []
@@ -81,7 +88,7 @@ class Window:
                                                               './demo',
                                                               'Excel files(*.txt)')
 
-        # self.fileName = testCaseFileName
+        self.testCaseFileName = testCaseFileName
         print(testCaseFileName)
 
         # index = -1
@@ -229,60 +236,60 @@ class Window:
 
         self.testCaseLabel, self.testMatrix = self.getlm()
 
-        print(self.testCaseLabel, self.testMatrix)
+        # print(self.testCaseLabel, self.testMatrix)
 
-        # if not self.testMatrix:
-        #     return
-        # lines_num = len(self.testMatrix[0])
-        #
-        # # ---- Default Algo ----
-        # # Process the code in ./demo/ps.py.
-        # lines_group = [[0, 1, 2]]  # split_code_from_file("./demo/ps.py")
-        # # Generate testset for default algo.
-        # testset_default = []
-        # for idx in range(len(self.testCaseLabel)):
-        #     label = self.testCaseLabel[idx]
-        #     line_covs = self.testMatrix[idx]  # one-hot list
-        #     cov_lines = [j for j in range(len(line_covs)) if line_covs[j] == 1]  # list of line index
-        #     cov_blocks = [j for j in range(len(lines_group)) if
-        #                   set(lines_group[j]) & set(cov_lines)]  # list of block index
-        #     testset_default.append((cov_blocks, label))
-        # # Run the default algo.
-        # result_tmp = cal_sus(testset_default, len(lines_group))  # [(block idx, sus)]
-        # # Generate from block to line
-        # result_default = [0 for _ in self.testMatrix[0]]
-        # for block_idx, sus in result_tmp:
-        #     for line in lines_group[block_idx]:
-        #         result_default[line] = max(result_default[line], sus)
-        #
-        # # ---- Other 4 Algos ----
-        # testset = [(self.testMatrix[idx], self.testCaseLabel[idx]) for idx in range(len(self.testCaseLabel))]
-        # result_dstar = dstar(testset)
-        # result_barinel = barinel(testset)
-        # result_ochiai = ochiai(testset)
-        # result_tarantula = Tarantula(testset)
-        #
-        # # ---- Format ----
-        # result_dict = {
-        #     "Default": np.array(result_default, dtype='f'),
-        #     "Dstar": result_dstar,
-        #     "Barinel": result_barinel,
-        #     "Ochiai": result_ochiai,
-        #     "Tarantula": result_tarantula
-        # }
-        # headers = result_dict.keys()
-        #
-        # # ---- Visualize ----
-        # self.ui.qtMatrixArea.setColumnCount(len(self.testMatrix[0]))
-        # self.ui.qtMatrixArea.setRowCount(len(result_dict))
-        # self.ui.qtMatrixArea.setHorizontalHeaderLabels([f"LINE {idx + 1}" for idx in range(lines_num)])
-        # self.ui.qtMatrixArea.setVerticalHeaderLabels(headers)
-        # self.ui.qtMatrixArea.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-        # for i, header in enumerate(headers):
-        #     sus = np.around(result_dict.get(header), 2)
-        #     for j in range(lines_num):
-        #         item = QTableWidgetItem(str(sus[j]))
-        #         self.ui.qtMatrixArea.setItem(i, j, item)
+        if not self.testMatrix:
+            return
+        lines_num = len(self.testMatrix[0])
+
+        # ---- Default Algo ----
+        # Process the code in ./demo/ps.py.
+        lines_group = [[0, 1, 2]]  # split_code_from_file("./demo/ps.py")
+        # Generate testset for default algo.
+        testset_default = []
+        for idx in range(len(self.testCaseLabel)):
+            label = self.testCaseLabel[idx]
+            line_covs = self.testMatrix[idx]  # one-hot list
+            cov_lines = [j for j in range(len(line_covs)) if line_covs[j] == 1]  # list of line index
+            cov_blocks = [j for j in range(len(lines_group)) if
+                          set(lines_group[j]) & set(cov_lines)]  # list of block index
+            testset_default.append((cov_blocks, label))
+        # Run the default algo.
+        result_tmp = cal_sus(testset_default, len(lines_group))  # [(block idx, sus)]
+        # Generate from block to line
+        result_default = [0 for _ in self.testMatrix[0]]
+        for block_idx, sus in result_tmp:
+            for line in lines_group[block_idx]:
+                result_default[line] = max(result_default[line], sus)
+
+        # ---- Other 4 Algos ----
+        testset = [(self.testMatrix[idx], self.testCaseLabel[idx]) for idx in range(len(self.testCaseLabel))]
+        result_dstar = dstar(testset)
+        result_barinel = barinel(testset)
+        result_ochiai = ochiai(testset)
+        result_tarantula = Tarantula(testset)
+
+        # ---- Format ----
+        result_dict = {
+            "Default": np.array(result_default, dtype='f'),
+            "Dstar": result_dstar,
+            "Barinel": result_barinel,
+            "Ochiai": result_ochiai,
+            "Tarantula": result_tarantula
+        }
+        headers = result_dict.keys()
+
+        # ---- Visualize ----
+        self.ui.qtMatrixArea.setColumnCount(len(self.testMatrix[0]))
+        self.ui.qtMatrixArea.setRowCount(len(result_dict))
+        self.ui.qtMatrixArea.setHorizontalHeaderLabels([f"LINE {idx + 1}" for idx in range(lines_num)])
+        self.ui.qtMatrixArea.setVerticalHeaderLabels(headers)
+        self.ui.qtMatrixArea.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        for i, header in enumerate(headers):
+            sus = np.around(result_dict.get(header), 2)
+            for j in range(lines_num):
+                item = QTableWidgetItem(str(sus[j]))
+                self.ui.qtMatrixArea.setItem(i, j, item)
 
     def getText(self):
 

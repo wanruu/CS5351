@@ -30,14 +30,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="text">
-           <string>add testcase</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QPushButton" name="save">
           <property name="styleSheet">
            <string notr="true"/>
           </property>
@@ -46,16 +39,6 @@
           </property>
           <property name="text">
            <string>save</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="run">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="text">
-           <string>run</string>
           </property>
          </widget>
         </item>
