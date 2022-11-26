@@ -160,7 +160,7 @@ class Window:
 
             for ind in range(len(p)):
                 if 3 < p[ind] - num:
-                    okm.append(p[ind] - 3)
+                    okm.append(p[ind] - 2)
                 elif p[ind] < num:
                     okm.append(p[ind])
 
