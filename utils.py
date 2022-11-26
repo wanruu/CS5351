@@ -54,3 +54,8 @@ def getmainlinenum(codefile: str):
         if ppp[i] == 'if __name__ == \'__main__\':':
             num = i + 1
     return num
+
+
+def gettotallinesnum(codefile: str):
+    ppp = codefile.split('\n')
+    return len(ppp)

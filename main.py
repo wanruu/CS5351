@@ -114,7 +114,7 @@ class Window:
     def more(self, input_, output_):
         for i in range(len(input_)):
             with open(self.INPUTFILEPATH[:-4] + str(i) + self.INPUTFILEPATH[-4:], 'w') as F:
-                print(input_[i])
+                # print(input_[i])
                 for j in range(len(input_[i])):
                     # print()
                     F.write(str(input_[i][j]) + '\n')
@@ -128,6 +128,8 @@ class Window:
         retLabel, matrix = [], []
 
         # print(len(self.testCasesOutput))
+        ayayyayyayay = self.ui.qtCodeArea.document().toPlainText()
+        totol_line = gettotallinesnum(ayayyayyayay)
         for i in range(len(self.testCasesOutput)):
 
             # print(i)
@@ -155,13 +157,23 @@ class Window:
             p = getLine('ps_copy')
 
             okm = []
+
             for ind in range(len(p)):
                 if 3 < p[ind] - num:
-                    okm.append(p[ind] - 4)
+                    okm.append(p[ind] - 3)
                 elif p[ind] < num:
-                    okm.append(p[ind]- 3)
+                    okm.append(p[ind])
 
-            matrix.append(okm)
+            retMatrix = []
+            for aaa in range(totol_line):
+                if aaa in okm:
+                    retMatrix.append(1)
+                else:
+                    retMatrix.append(0)
+
+            # print(retMatrix)
+
+            matrix.append(retMatrix)
             ans = []
             with open(opath, 'r') as F:
                 for line in F.readlines():
@@ -198,6 +210,7 @@ class Window:
                 os.remove(ipath)
                 os.remove(opath)
         os.remove(self.COPYCODEPATH)
+
 
         # print(len(retLabel), len(matrix))
         # print(retLabel, matrix)
