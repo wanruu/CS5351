@@ -216,7 +216,7 @@ class Window:
 
         self.testCaseLabel, self.testMatrix = self.getlm()
 
-        print(self.testMatrix, self.testMatrix)
+        print(self.testCaseLabel, self.testMatrix)
 
         # if not self.testMatrix:
         #     return
